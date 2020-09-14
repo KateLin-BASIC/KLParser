@@ -1,0 +1,81 @@
+﻿Build1=Default,katelin.klparser.com
+Build2=New_1,katelin.klparser.com
+File1=Layout1.bal
+FileGroup1=Default Group
+Group=Default Group
+Library1=core
+Library2=floatingactionbutton
+Library3=xmllayoutbuilder
+Library4=okhttputils2
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: https://www.b4x.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="28"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~CreateResourceFromFile(Macro, Themes.LightTheme)
+Module1=Starter
+NumberOfFiles=1
+NumberOfLibraries=4
+NumberOfModules=1
+Version=9.85
+@EndOfDesignText@
+#Region  Project Attributes 
+	#ApplicationLabel: KLParser
+	#VersionCode: 1
+	#VersionName: 
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+	#AdditionalRes: C:\Program Files (x86)\Anywhere Software\Basic4android\Libraries\b4a_floatingactionbutton, de.amberhome.objects.floatingactionbutton
+	#AdditionalRes: ..\resource
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	
+End Sub
+
+Sub Globals
+	Private EditText2 As EditText
+	Private FloatingActionButton1 As FloatingActionButton
+	Private EditText1 As EditText
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	'http://www.acronetwork.org/bower_components/material-design-icons/content/drawable-xxxhdpi/
+	'https://www.img-bak.in/
+	
+	Activity.LoadLayout("Layout1")
+	
+	Private cd As ColorDrawable
+	cd.Initialize(Colors.Transparent, 0)
+	EditText2.Background = cd
+	
+	Dim xml As XmlLayoutBuilder
+	FloatingActionButton1.Icon = xml.GetDrawable("ic_save_black_24dp")
+	FloatingActionButton1.Color = Colors.RGB(255, 255, 255)
+	FloatingActionButton1.ColorPressed = Colors.RGB(235,235,235)
+	FloatingActionButton1.ColorRipple = Colors.RGB(215,215,215)
+	FloatingActionButton1.Type = FloatingActionButton1.TYPE_NORMAL
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+
+Sub FloatingActionButton1_Click
+	If Not(EditText1.Text = "") Then
+		Dim j As HttpJob
+		j.Initialize("", Me)
+		j.Download(EditText1.Text)
+		Wait For (j) JobDone(j As HttpJob)
+		If j.Success Then
+			EditText2.Text = j.GetString
+		End If
+		j.Release
+	End If
+End Sub
